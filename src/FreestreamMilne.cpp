@@ -108,7 +108,8 @@ class FREESTREAMMILNE {
 
     //support to write final hydro variables to vectors - useful for JETSCAPE
     //note we need to convert back to GeV / fm^3 units here
-    void output_to_vectors(std::vector<double>&, //e
+    void output_to_vectors(double &,             //tau0
+                            std::vector<double>&, //e
                             std::vector<double>&, //p
                             std::vector<double>&, //ut
                             std::vector<double>&, //ux
@@ -124,8 +125,14 @@ class FREESTREAMMILNE {
                             std::vector<double>&, //piyy
                             std::vector<double>&, //piyn
                             std::vector<double>&, //pinn
-                            std::vector<double>&); //Pi
+                            std::vector<double>&, //Pi
+                            std::vector<double>&, //rhob
+                            std::vector<double>&, //q0
+                            std::vector<double>&, //q1
+                            std::vector<double>&, //q2
+                            std::vector<double>& ); //q3
 
+    double final_tau;
     std::vector<double> final_energy_density;
     std::vector<double> final_pressure;
     std::vector<double> final_ut;
@@ -143,6 +150,11 @@ class FREESTREAMMILNE {
     std::vector<double> final_piyn;
     std::vector<double> final_pinn;
     std::vector<double> final_Pi;
+    std::vector<double> final_rhob;
+    std::vector<double> final_q0;
+    std::vector<double> final_q1;
+    std::vector<double> final_q2;
+    std::vector<double> final_q3;
 
 };
 
@@ -159,7 +171,8 @@ void FREESTREAMMILNE::initialize_from_vector(std::vector<float> energy_density_i
 }
 
 //use this function to return final hydro variables as vectors within JETSCAPE
-void FREESTREAMMILNE::output_to_vectors(std::vector<double> &energy_density_out,
+void FREESTREAMMILNE::output_to_vectors(double& tau0_out,
+                                        std::vector<double> &energy_density_out,
                                         std::vector<double> &pressure_out,
                                         std::vector<double> &ut_out,
                                         std::vector<double> &ux_out,
@@ -175,7 +188,13 @@ void FREESTREAMMILNE::output_to_vectors(std::vector<double> &energy_density_out,
                                         std::vector<double> &piyy_out,
                                         std::vector<double> &piyn_out,
                                         std::vector<double> &pinn_out,
-                                        std::vector<double> &Pi_out) {
+                                        std::vector<double> &Pi_out,
+                                        std::vector<double> &rho_out,
+                                        std::vector<double> &q0_out,
+                                        std::vector<double> &q1_out,
+                                        std::vector<double> &q2_out,
+                                        std::vector<double> &q3_out) {
+  tau0_out = final_tau;
   energy_density_out = final_energy_density;
   pressure_out = final_pressure;
   ut_out = final_ut;
@@ -193,6 +212,11 @@ void FREESTREAMMILNE::output_to_vectors(std::vector<double> &energy_density_out,
   piyn_out = final_piyn;
   pinn_out = final_pinn;
   Pi_out = final_Pi;
+  rho_out = final_rhob;
+  q0_out = final_q0;
+  q1_out = final_q1;
+  q2_out = final_q2;
+  q3_out = final_q3;
 }
 
 parameters * FREESTREAMMILNE::configure(const char *filename) {
@@ -743,6 +767,11 @@ final_piyy.resize(params.DIM);
 final_piyn.resize(params.DIM);
 final_pinn.resize(params.DIM);
 final_Pi.resize(params.DIM);
+final_rhob.resize(params.DIM);
+final_q0.resize(params.DIM);
+final_q1.resize(params.DIM);
+final_q2.resize(params.DIM);
+final_q3.resize(params.DIM);
 
 if ( (params.OUTPUTFORMAT == 2) || (params.OUTPUTFORMAT == 3) )
 {
@@ -766,7 +795,13 @@ if ( (params.OUTPUTFORMAT == 2) || (params.OUTPUTFORMAT == 3) )
     final_piyn[is] = (double)shearTensor[8][is] * hbarc;
     final_pinn[is] = (double)shearTensor[9][is] * hbarc;
     final_Pi[is] = (double)bulkPressure[is] * hbarc;
+    final_rhob[is] = 0.0;
+    final_q0[is] = 0.0;
+    final_q1[is] = 0.0;
+    final_q2[is] = 0.0;
+    final_q3[is] = 0.0;
   }
+  final_tau = params.TAU;
 }
 
 //free the memory
