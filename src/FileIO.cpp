@@ -5,11 +5,11 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <math.h>
 #include "Parameter.h"
 #include "FSConfig.h"
-#include "evolutionDataStruct.h"
-#include <math.h>
 #include "EquationOfState.cpp"
+#include "evolutionDataStruct.h"
 
 void writeScalarToFile(float *var, char name[255], parameters params)
 {
@@ -330,7 +330,7 @@ void outputEvolutionDataXYEta_chun(float *energyDensity, float **flowVelocity, i
 // This function outputs freestreaming evolution file in binary format
 void outputEvolutionData_to_memory(
         float *energyDensity, float **flowVelocity, parameters params,
-        std::vector<fluidCell_ideal> &evolutionVector) {
+        std::vector<fsmilne::fluidCell_ideal> &evolutionVector) {
     const float hbarc = 0.197326938;
     const float tau0 = params.TAUJ;
 
@@ -354,7 +354,7 @@ void outputEvolutionData_to_memory(
                 // T_local is in 1/fm (conformal EoS)
                 float T_local = temperatureFromEnergyDensity(e_local);
 
-                fluidCell_ideal cell;
+                fsmilne::fluidCell_ideal cell;
                 cell.eta = eta;
                 cell.ed = e_local*hbarc;
                 cell.pressure = p_local*hbarc;

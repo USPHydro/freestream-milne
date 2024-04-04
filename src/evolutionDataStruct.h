@@ -1,6 +1,6 @@
 #ifndef _SRC_EVOLUTIONDATASTRUCT_H_
 #define _SRC_EVOLUTIONDATASTRUCT_H_
-
+namespace fsmilne{
 typedef struct {
     float eta;
     float sd, ed, pressure, temperature;
@@ -14,5 +14,5 @@ typedef struct {
    float pi[4][4];
    float bulkPi;
 } fluidCell;
-
+}
 #endif  // _SRC_EVOLUTIONDATASTRUCT_H_

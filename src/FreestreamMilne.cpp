@@ -50,7 +50,7 @@ class FREESTREAMMILNE {
     //then we convert to fm^(-4)
     void initialize_from_vector(std::vector<float>);
     std::vector<float> init_energy_density;
-    std::vector<fluidCell_ideal> evolutionHistoryVector_;
+    std::vector<fsmilne::fluidCell_ideal> evolutionHistoryVector_;
 
     float GetPreequilibriumStartTime() const {
         return(params.TAUJ);
@@ -66,7 +66,7 @@ class FREESTREAMMILNE {
 
     int get_number_of_fluid_cells() { return(evolutionHistoryVector_.size()); }
     void clear_evolution_data() { evolutionHistoryVector_.clear(); }
-    void get_fluid_cell_with_index(const int idx, fluidCell &info) {
+    void get_fluid_cell_with_index(const int idx, fsmilne::fluidCell &info) {
         info.temperature = static_cast<float>(
                                     evolutionHistoryVector_[idx].temperature);
         double ux = evolutionHistoryVector_[idx].ux;
